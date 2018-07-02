@@ -1,48 +1,63 @@
 package com.qait.automation.futureFuel;
 
-import java.util.Set;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 public class openingTab {
 	JavascriptExecutor jsDriver;
 	WebDriverWait wait;
-	public openingTab(JavascriptExecutor jsDriver) {
+	WebDriver driver;
+	public openingTab(JavascriptExecutor jsDriver,WebDriver driver) {
 		this.jsDriver=jsDriver;
+		this.driver=driver;
 	}
-	public void opening_tab(WebDriver driver) throws InterruptedException {
-		jsDriver.executeScript("document.querySelector('button[data-target=\"#videoModal\"]').click()");
-		Thread.sleep(3000);
+	public void opening_tab()  {
+		driver.findElement(By.cssSelector("button[data-target='#videoModal']")).click();
+		}
+	
+	public void making_Elements_Visible() {
 		driver.switchTo().frame("iframeVideo");
-		Actions builder = new Actions(driver);
-		Thread.sleep(2000);
-		builder.moveToElement(driver.findElement(By.className("share-button"))).click().build().perform();
-		builder.moveToElement(driver.findElement(By.className("vp-nav-closeButton"))).click().build().perform();
-		Thread.sleep(2000);
-		builder.moveToElement(driver.findElement(By.className("like-button"))).click().build().perform();
-		windowSwitching(driver);
-		 driver.switchTo().frame("iframeVideo");
-		builder.moveToElement(driver.findElement(By.className("watch-later-button"))).click().build().perform();
-		windowSwitching(driver);
+		wait=new WebDriverWait(driver, 10);
+		WebElement element=driver.findElement(By.className("play"));
+		wait.until(ExpectedConditions.invisibilityOf(element));
+		jsDriver.executeScript("document.querySelector(\".vp-sidedock\").removeAttribute(\"hidden\")");
+		jsDriver.executeScript("document.querySelector(\".vp-sidedock\").classList.remove(\'invisible\')");
+		jsDriver.executeScript("document.querySelector(\".vp-sidedock\").classList.remove(\'hidden\')");
+		jsDriver.executeScript("document.querySelector(\".vp-controls\").removeAttribute(\"hidden\")");
+		jsDriver.executeScript("document.querySelector(\".vp-controls\").classList.remove(\'invisible\')");
+		jsDriver.executeScript("document.querySelector(\".vp-controls\").classList.remove(\'hidden\')");
+	}
+	
+	
+	public void like_Button() {
+		driver.findElement(By.className("like-button")).isDisplayed();
+		}
+	
+	
+	public void watch_later_Button() {
+		driver.findElement(By.className("watch-later-button")).isDisplayed();
+		}
+	
+	
+	public void share_Button() {
+		driver.findElement(By.className("share-button")).isDisplayed();
+		}
+	
+	
+	public void closing_Video() {
+		driver.switchTo().defaultContent();
 		driver.findElement(By.className("close")).click();
+		}
+	
+	
+	public void assertion() {
 		WebElement response=driver.findElement(By.id("logo"));
 		Assert.assertEquals(true, response.isDisplayed());
-	}
-	public void windowSwitching(WebDriver driver) {
-		String parentWindow=driver.getWindowHandle();
-	     String subWindow=null;
-	     Set<String> handles=driver.getWindowHandles();
-	     for(String h:handles) {
-	    	 subWindow=h;
-	     }	     
-	     driver.switchTo().window(subWindow);
-	     driver.close();
-	     driver.switchTo().window(parentWindow);    
-	}
+		}
+
 }
