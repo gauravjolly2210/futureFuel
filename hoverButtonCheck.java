@@ -20,12 +20,39 @@ public class hoverButtonCheck {
 		driver=new ChromeDriver();
 		jsDriver=(JavascriptExecutor) driver;
 		driver.get("https://futurefuel.io/");
+		tab=new openingTab(jsDriver,driver);
 	}
 
 	@Test
-	public void Step_01_opening_Video_tab() throws InterruptedException {
-		tab=new openingTab(jsDriver);
-		tab.opening_tab(driver);	
+	public void Step_01_opening_Video()  {
+		tab.opening_tab();	
+	}
+	
+	
+	@Test
+	public void Step_02_making_Elements_Permanent() {
+		tab.making_Elements_Visible();
+	}
+	
+	@Test
+	public void Step_03_checking_LIKE_Button() {
+		tab.like_Button();
+	}
+	
+	@Test
+	public void Step_04_checking_Watch_Later_Button() {
+		tab.watch_later_Button();
+	}
+	
+	@Test
+	public void Step_05_checking_SHARE_Button() {
+		tab.share_Button();
+	}
+	
+	@Test
+	public void Step_06_video_Closing_and_Assertion() {
+		tab.closing_Video();
+		tab.assertion();
 	}
 	
 	@AfterClass
